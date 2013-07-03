@@ -1,1 +1,1 @@
-include ':GCMBackend'
+include ':GCMBackend', ':GCMBackend-GCMBackend-AppEngine'

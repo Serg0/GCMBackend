@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GCMBackend.iml" filepath="$PROJECT_DIR$/GCMBackend.iml" />
       <module fileurl="file://$PROJECT_DIR$/GCMBackend/GCMBackend-GCMBackend.iml" filepath="$PROJECT_DIR$/GCMBackend/GCMBackend-GCMBackend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GCMBackend-GCMBackend-AppEngine/GCMBackend-GCMBackend-AppEngine.iml" filepath="$PROJECT_DIR$/GCMBackend-GCMBackend-AppEngine/GCMBackend-GCMBackend-AppEngine.iml" />
     </modules>
   </component>
 </project>
