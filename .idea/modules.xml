@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/GCMBackend/GCMBackend.iml" filepath="$PROJECT_DIR$/GCMBackend/GCMBackend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/GCMBackendProject.iml" filepath="$PROJECT_DIR$/GCMBackendProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GCMBackend.iml" filepath="$PROJECT_DIR$/GCMBackend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GCMBackend/GCMBackend-GCMBackend.iml" filepath="$PROJECT_DIR$/GCMBackend/GCMBackend-GCMBackend.iml" />
     </modules>
   </component>
 </project>
