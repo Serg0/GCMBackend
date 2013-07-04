@@ -21,3 +21,11 @@ android {
         targetSdkVersion 16
     }
 }
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile project(':GCMBackend-GCMBackend-endpoints')
+}

@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/GCMBackend.iml" filepath="$PROJECT_DIR$/GCMBackend.iml" />
       <module fileurl="file://$PROJECT_DIR$/GCMBackend/GCMBackend-GCMBackend.iml" filepath="$PROJECT_DIR$/GCMBackend/GCMBackend-GCMBackend.iml" />
       <module fileurl="file://$PROJECT_DIR$/GCMBackend-GCMBackend-AppEngine/GCMBackend-GCMBackend-AppEngine.iml" filepath="$PROJECT_DIR$/GCMBackend-GCMBackend-AppEngine/GCMBackend-GCMBackend-AppEngine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GCMBackend-GCMBackend-endpoints/GCMBackend-GCMBackend-endpoints.iml" filepath="$PROJECT_DIR$/GCMBackend-GCMBackend-endpoints/GCMBackend-GCMBackend-endpoints.iml" />
     </modules>
   </component>
 </project>

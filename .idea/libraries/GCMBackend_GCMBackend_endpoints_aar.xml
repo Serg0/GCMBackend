@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="GCMBackend-GCMBackend-endpoints.aar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/GCMBackend/build/exploded-bundles/GCMBackend-GCMBackend-endpoints.aar/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

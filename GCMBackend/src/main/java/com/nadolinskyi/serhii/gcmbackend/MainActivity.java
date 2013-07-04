@@ -1,5 +1,6 @@
 package com.nadolinskyi.serhii.gcmbackend;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -11,6 +12,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
     //some changes
         //some changes2
     }

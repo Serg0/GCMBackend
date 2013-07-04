@@ -1,1 +1,1 @@
-include ':GCMBackend', ':GCMBackend-GCMBackend-AppEngine'
+include ':GCMBackend', ':GCMBackend-GCMBackend-AppEngine', ':GCMBackend-GCMBackend-AppEngine', ':GCMBackend-GCMBackend-endpoints'
