@@ -4,5 +4,8 @@
     <string name="app_name">GCM+Backend</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="btnSend">Send</string>
+    <string name="hintNickname">Enter Your Nickname</string>
+    <string name="hintMessage">Type your message</string>
 
 </resources>

@@ -146,7 +146,7 @@ public class RegisterActivity extends Activity {
      */
     if (intent.getBooleanExtra("gcmIntentServiceMessage", false)) {
 
-      showDialog(intent.getStringExtra("message"));
+//      showDialog(intent.getStringExtra("message"));
 
       if (intent.getBooleanExtra("registrationMessage", false)) {
 

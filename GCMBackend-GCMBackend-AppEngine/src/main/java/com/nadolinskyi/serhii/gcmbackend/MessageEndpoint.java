@@ -120,12 +120,13 @@ public class MessageEndpoint {
      * @throws java.io.IOException
      */
     @ApiMethod(name = "sendMessage")
-    public void sendMessage(@Named("message") String message)
+    public void sendMessage(@Named("nickname") String nickname, @Named("message") String message)
             throws IOException {
         Sender sender = new Sender(API_KEY);
         // create a MessageData entity with a timestamp of when it was
         // received, and persist it
         MessageData messageObj = new MessageData();
+        messageObj.setNickName(nickname);
         messageObj.setMessage(message);
         messageObj.setTimestamp(System.currentTimeMillis());
         EntityManager mgr = getEntityManager();

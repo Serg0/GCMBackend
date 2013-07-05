@@ -6,7 +6,10 @@
 
     <string name="action_settings">Settings</string>
     <string name="app_name">GCM+Backend</string>
+    <string name="btnSend">Send</string>
     <string name="hello_world">Hello world!</string>
+    <string name="hintMessage">Type your message</string>
+    <string name="hintNickname">Enter Your Nickname</string>
 
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--

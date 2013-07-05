@@ -2,6 +2,7 @@
   <library name="gcm">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/GCMBackend-GCMBackend-endpoints/libs/gcm.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GCMBackend/build/exploded-bundles/GCMBackend-GCMBackend-endpoints.aar/libs/gcm.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
