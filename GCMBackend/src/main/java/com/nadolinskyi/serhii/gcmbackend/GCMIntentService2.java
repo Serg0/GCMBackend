@@ -1,8 +1,5 @@
 package com.nadolinskyi.serhii.gcmbackend;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -13,9 +10,11 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
-
 import com.nadolinskyi.serhii.gcmbackend.deviceinfoendpoint.Deviceinfoendpoint;
 import com.nadolinskyi.serhii.gcmbackend.deviceinfoendpoint.model.DeviceInfo;
+
+import java.io.IOException;
+import java.net.URLEncoder;
 
 /**
  * This class is started up as a service of the Android application. It listens
@@ -36,7 +35,7 @@ import com.nadolinskyi.serhii.gcmbackend.deviceinfoendpoint.model.DeviceInfo;
  * http://developers.google.com/eclipse/docs/cloud_endpoints for more
  * information.
  */
-public class GCMIntentService extends GCMBaseIntentService {
+public class GCMIntentService2 extends GCMBaseIntentService {
   private final Deviceinfoendpoint endpoint;
 
   /*
@@ -68,7 +67,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     GCMRegistrar.unregister(mContext);
   }
 
-  public GCMIntentService() {
+  public GCMIntentService2() {
     super(PROJECT_NUMBER);
     Deviceinfoendpoint.Builder endpointBuilder = new Deviceinfoendpoint.Builder(
         AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
@@ -76,7 +75,7 @@ public class GCMIntentService extends GCMBaseIntentService {
           public void initialize(HttpRequest httpRequest) {
           }
         });
-    endpoint = CloudEndpointUtils.updateBuilder(endpointBuilder).build();
+    endpoint = CloudEndpointUtils2.updateBuilder(endpointBuilder).build();
   }
 
   /**
@@ -167,7 +166,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                             "UTF-8"))).execute();
       }
     } catch (IOException e) {
-      Log.e(GCMIntentService.class.getName(),
+      Log.e(GCMIntentService2.class.getName(),
           "Exception received when attempting to register with server at "
               + endpoint.getRootUrl(), e);
 
@@ -211,7 +210,7 @@ public class GCMIntentService extends GCMBaseIntentService {
       try {
         endpoint.removeDeviceInfo(registrationId).execute();
       } catch (IOException e) {
-        Log.e(GCMIntentService.class.getName(),
+        Log.e(GCMIntentService2.class.getName(),
             "Exception received when attempting to unregister with server at "
                 + endpoint.getRootUrl(), e);
         sendNotificationIntent(
@@ -267,8 +266,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 
   private String getWebSampleUrl(String endpointUrl) {
     // Not the most elegant solution; we'll improve this in the future
-    if (CloudEndpointUtils.LOCAL_ANDROID_RUN) {
-      return CloudEndpointUtils.LOCAL_APP_ENGINE_SERVER_URL
+    if (CloudEndpointUtils2.LOCAL_ANDROID_RUN) {
+      return CloudEndpointUtils2.LOCAL_APP_ENGINE_SERVER_URL
           + "index.html";
     }
     return endpointUrl.replace("/_ah/api/", "/index.html");
