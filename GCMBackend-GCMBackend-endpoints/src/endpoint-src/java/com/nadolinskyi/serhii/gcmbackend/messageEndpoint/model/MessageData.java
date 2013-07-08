@@ -94,6 +94,7 @@ public final class MessageData extends com.google.api.client.json.GenericJson {
     return this;
   }
 
+  @com.google.api.client.util.Key
   private String nickName;
 
   public String getNickName() {

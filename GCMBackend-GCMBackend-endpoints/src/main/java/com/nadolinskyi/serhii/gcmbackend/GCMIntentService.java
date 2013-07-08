@@ -70,6 +70,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
   public GCMIntentService() {
     super(PROJECT_NUMBER);
+    Log.d("GCMIntentService", "Constructor created");
     Deviceinfoendpoint.Builder endpointBuilder = new Deviceinfoendpoint.Builder(
         AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
         new HttpRequestInitializer() {

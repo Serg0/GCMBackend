@@ -60,7 +60,7 @@ public class MessageData {
     }
 
 
-    /*private String nickName;
+    private String nickName;
 
     public String getNickName() {
         return nickName;
@@ -68,5 +68,5 @@ public class MessageData {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
-    }*/
+    }
 }

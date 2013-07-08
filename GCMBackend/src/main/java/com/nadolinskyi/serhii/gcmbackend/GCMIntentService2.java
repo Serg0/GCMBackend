@@ -36,7 +36,8 @@ import java.net.URLEncoder;
  * information.
  */
 public class GCMIntentService2 extends GCMBaseIntentService {
-  private final Deviceinfoendpoint endpoint;
+    private static final String LOG_TAG = "GCMIntentService2";
+    private final Deviceinfoendpoint endpoint;
 
   /*
    * TODO: Set this to a valid project number. See
@@ -69,6 +70,7 @@ public class GCMIntentService2 extends GCMBaseIntentService {
 
   public GCMIntentService2() {
     super(PROJECT_NUMBER);
+    Log.d("GCMIntentService2", "Constructor created");
     Deviceinfoendpoint.Builder endpointBuilder = new Deviceinfoendpoint.Builder(
         AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
         new HttpRequestInitializer() {
@@ -127,6 +129,8 @@ public class GCMIntentService2 extends GCMBaseIntentService {
      * This is some special exception-handling code that we're using to work around a problem
      * with the DevAppServer and methods that return null in App Engine 1.7.5.
      */
+
+    Log.d(LOG_TAG, "onRegistered");
     boolean alreadyRegisteredWithEndpointServer = false;
 
     try {
@@ -235,12 +239,12 @@ public class GCMIntentService2 extends GCMBaseIntentService {
   }
 
   /**
-   * Generate a notification intent and dispatch it to the RegisterActivity.
+   * Generate a notification intent and dispatch it to the MainActivity.
    * This is how we get information from this service (non-UI) back to the
    * activity.
    * 
    * For this to work, the 'android:launchMode="singleTop"' attribute needs to
-   * be set for the RegisterActivity in AndroidManifest.xml.
+   * be set for the MainActivity in AndroidManifest.xml.
    * 
    * @param context
    *            the application context
@@ -254,7 +258,7 @@ public class GCMIntentService2 extends GCMBaseIntentService {
    */
   private void sendNotificationIntent(Context context, String message,
       boolean isError, boolean isRegistrationMessage) {
-    Intent notificationIntent = new Intent(context, RegisterActivity.class);
+    Intent notificationIntent = new Intent(context, MainActivity.class);
     notificationIntent.putExtra("gcmIntentServiceMessage", true);
     notificationIntent.putExtra("registrationMessage",
         isRegistrationMessage);
@@ -262,6 +266,10 @@ public class GCMIntentService2 extends GCMBaseIntentService {
     notificationIntent.putExtra("message", message);
     notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     startActivity(notificationIntent);
+
+   Log.d(LOG_TAG, "sendNotificationIntent "+message);
+
+
   }
 
   private String getWebSampleUrl(String endpointUrl) {
