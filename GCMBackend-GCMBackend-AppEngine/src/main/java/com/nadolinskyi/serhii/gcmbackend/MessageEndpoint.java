@@ -126,7 +126,7 @@ public class MessageEndpoint {
         // create a MessageData entity with a timestamp of when it was
         // received, and persist it
         MessageData messageObj = new MessageData();
-//        messageObj.setNickName(nickname);
+        messageObj.setNickName(nickname);
         messageObj.setMessage(message);
         messageObj.setTimestamp(System.currentTimeMillis());
         EntityManager mgr = getEntityManager();
@@ -139,7 +139,7 @@ public class MessageEndpoint {
         CollectionResponse<DeviceInfo> response = endpoint.listDeviceInfo(null,
                 10);
         for (DeviceInfo deviceInfo : response.getItems()) {
-            doSendViaGcm(message, sender, deviceInfo);
+            doSendViaGcm(nickname, message, sender, deviceInfo);
         }
     }
 
@@ -147,11 +147,12 @@ public class MessageEndpoint {
      * Sends the message using the Sender object to the registered device.
      *
      * @param message    the message to be sent in the GCM ping to the device.
+     * @param message    the message to be sent in the GCM ping to the device.
      * @param sender     the Sender object to be used for ping,
      * @param deviceInfo the registration id of the device.
      * @return Result the result of the ping.
      */
-    private static Result doSendViaGcm(String message, Sender sender,
+    private static Result doSendViaGcm(String nickname, String message, Sender sender,
                                        DeviceInfo deviceInfo) throws IOException {
         // Trim message if needed.
         if (message.length() > 1000) {
@@ -160,7 +161,8 @@ public class MessageEndpoint {
 
         // This message object is a Google Cloud Messaging object, it is NOT 
         // related to the MessageData class
-        Message msg = new Message.Builder().addData("message", message).build();
+        Message msg = new Message.Builder().addData("message", message)
+                            .addData("nickname",nickname).build();
         Result result = sender.send(msg, deviceInfo.getDeviceRegistrationID(),
                 5);
         if (result.getMessageId() != null) {

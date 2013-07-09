@@ -25,7 +25,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <service android:name=".GCMIntentService2"/>
+        <service android:name=".GCMIntentService"/>
         <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
@@ -37,7 +37,7 @@
             </intent-filter>
         </receiver>
         <activity
-            android:name="com.nadolinskyi.serhii.gcmbackend.MainActivity"
+            android:name="com.nadolinskyi.serhii.gcmbackend.MainActivity" android:launchMode="singleTop"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

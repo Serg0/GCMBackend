@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
                     public void initialize(HttpRequest httpRequest) { }
                 });
 
-        messageEndpoint = CloudEndpointUtils2.updateBuilder(endpointBuilder).build();
+        messageEndpoint = CloudEndpointUtils.updateBuilder(endpointBuilder).build();
 
     }
 
@@ -165,8 +165,8 @@ public class MainActivity extends Activity {
 
     private void registerInCloud() {
 
-        if (GCMIntentService2.PROJECT_NUMBER == null
-                || GCMIntentService2.PROJECT_NUMBER.length() == 0) {
+        if (GCMIntentService.PROJECT_NUMBER == null
+                || GCMIntentService.PROJECT_NUMBER.length() == 0) {
             showDialog("Unable to register for Google Cloud Messaging. "
                     + "Your application's PROJECT_NUMBER field is unset! You can change "
                     + "it in GCMIntentService2.java");
@@ -176,7 +176,7 @@ public class MainActivity extends Activity {
         } else {
             updateState(State.REGISTERING);
             try {
-                GCMIntentService2.register(getApplicationContext());
+                GCMIntentService.register(getApplicationContext());
             } catch (Exception e) {
                 Log.e(LOG_TAG,
                         "Exception received when attempting to register for Google Cloud "
@@ -206,7 +206,7 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        GCMIntentService2.unregister(getApplicationContext());
+        GCMIntentService.unregister(getApplicationContext());
     }
 
 
@@ -304,7 +304,7 @@ public class MainActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-
+                MessageEndpoint.SendMessage a = messageEndpoint.sendMessage(nickname, message);
                messageEndpoint.sendMessage(nickname, message).execute();
             } catch (IOException e) {
                 exceptionThrown = e;

@@ -95,14 +95,15 @@ public final class MessageData extends com.google.api.client.json.GenericJson {
   }
 
   @com.google.api.client.util.Key
-  private String nickName;
+  private java.lang.String nickName;
 
   public String getNickName() {
        return nickName;
   }
 
-  public void setNickName(String nickName) {
+  public MessageData setNickName(java.lang.String nickName) {
       this.nickName = nickName;
+      return this;
   }
 
   @Override

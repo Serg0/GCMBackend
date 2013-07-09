@@ -250,7 +250,7 @@ public class MessageEndpoint extends com.google.api.client.googleapis.services.j
 
   public class SendMessage extends MessageEndpointRequest<Void> {
 
-    private static final String REST_PATH = "sendMessage/{message}";
+    private static final String REST_PATH = "sendMessage/{nickname}{message}";
 
     /**
      * Create a request for the method "sendMessage".
