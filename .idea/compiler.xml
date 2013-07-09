@@ -29,6 +29,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="GCMBackend-GCMBackend" target="" />
       <module name="GCMBackend-GCMBackend-AppEngine" target="1.6" />
     </bytecodeTargetLevel>
   </component>

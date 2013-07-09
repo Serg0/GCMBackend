@@ -147,7 +147,7 @@ public class MessageEndpoint {
      * Sends the message using the Sender object to the registered device.
      *
      * @param message    the message to be sent in the GCM ping to the device.
-     * @param message    the message to be sent in the GCM ping to the device.
+     * @param nickname   the nickname to be sent in the GCM ping to the device.
      * @param sender     the Sender object to be used for ping,
      * @param deviceInfo the registration id of the device.
      * @return Result the result of the ping.

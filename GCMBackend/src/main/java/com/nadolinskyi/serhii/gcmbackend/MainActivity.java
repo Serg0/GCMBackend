@@ -247,7 +247,7 @@ public class MainActivity extends Activity {
         protected CollectionResponseMessageData doInBackground(Void... params) {
             try {
                 CollectionResponseMessageData messages =
-                        messageEndpoint.listMessages().setLimit(50).execute();
+                        messageEndpoint.listMessages().setLimit(10).execute();
                 return messages;
             } catch (IOException e) {
                 exceptionThrown = e;
@@ -280,7 +280,7 @@ public class MainActivity extends Activity {
                     }
 
                     Date date = new Date(message.getTimestamp());
-                    txtChat.append(date.getHours()+":"+date.getMinutes()+"<"+message.getMessage()+">" + "\n");
+                    txtChat.append(date.getHours()+":"+date.getMinutes()+"<"+message.getNickName()+">"+message.getMessage() + "\n");
                 }
             }
         }
