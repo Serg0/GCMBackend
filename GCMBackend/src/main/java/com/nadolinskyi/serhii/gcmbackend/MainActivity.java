@@ -18,6 +18,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
+import com.nadolinskyi.serhii.gcmbackend.custommessageendpoint.Custommessageendpoint;
 import com.nadolinskyi.serhii.gcmbackend.messageEndpoint.MessageEndpoint;
 import com.nadolinskyi.serhii.gcmbackend.messageEndpoint.model.CollectionResponseMessageData;
 import com.nadolinskyi.serhii.gcmbackend.messageEndpoint.model.MessageData;
@@ -36,6 +37,7 @@ public class MainActivity extends Activity {
 
     private State curState = State.UNREGISTERED;
     private MessageEndpoint messageEndpoint = null;
+    private Custommessageendpoint custommessageendpoint = null;
 
 
     @Override
@@ -74,6 +76,15 @@ public class MainActivity extends Activity {
                 });
 
         messageEndpoint = CloudEndpointUtils.updateBuilder(endpointBuilder).build();
+
+        Custommessageendpoint.Builder customMessageEndpoint = new Custommessageendpoint.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new JacksonFactory(),
+                new HttpRequestInitializer() {
+                    public void initialize(HttpRequest httpRequest) { }
+                });
+
+        custommessageendpoint = CloudEndpointUtils.updateBuilder(customMessageEndpoint).build();
 
     }
 
@@ -172,7 +183,7 @@ public class MainActivity extends Activity {
                     + "it in GCMIntentService2.java");
             Log.e(LOG_TAG,"Unable to register for Google Cloud Messaging. "
                     + "Your application's PROJECT_NUMBER field is unset! You can change "
-                    + "it in GCMIntentService2.java");
+                    + "it in GCMIntentService.java");
         } else {
             updateState(State.REGISTERING);
             try {

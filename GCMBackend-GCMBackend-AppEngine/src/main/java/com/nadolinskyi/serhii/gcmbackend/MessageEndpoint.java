@@ -137,7 +137,7 @@ public class MessageEndpoint {
         }
         // ping a max of 10 registered devices
         CollectionResponse<DeviceInfo> response = endpoint.listDeviceInfo(null,
-                10);
+                100);
         for (DeviceInfo deviceInfo : response.getItems()) {
             doSendViaGcm(nickname, message, sender, deviceInfo);
         }
