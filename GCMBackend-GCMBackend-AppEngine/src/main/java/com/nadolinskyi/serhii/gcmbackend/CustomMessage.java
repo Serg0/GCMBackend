@@ -17,9 +17,8 @@ public class CustomMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public java.lang.Long id;
 
-    public java.lang.Long   latitude;
-    public java.lang.Long   longitude;
-    public java.lang.String indefiner;
+    public java.lang.String name;
+    public java.lang.String message;
 
     public Long getId() {
         return id;
@@ -29,28 +28,30 @@ public class CustomMessage {
         this.id = id;
     }
 
-    public Long getLatitude() {
-        return latitude;
+    public String getName() {
+        return name;
     }
 
-    public void setLatitude(Long latitude) {
-        this.latitude = latitude;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Long getLongitude() {
-        return longitude;
+    public String getMessage() {
+        return message;
     }
 
-    public void setLongitude(Long longitude) {
-        this.longitude = longitude;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public String getIndefiner() {
-        return indefiner;
+    public Long getTimestamp() {
+        return timestamp;
     }
 
-    public void setIndefiner(String indefiner) {
-        this.indefiner = indefiner;
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
+
+    public java.lang.Long timestamp;
 
 }

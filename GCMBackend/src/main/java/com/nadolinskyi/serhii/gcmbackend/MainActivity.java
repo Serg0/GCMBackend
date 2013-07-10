@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,9 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
+import com.nadolinskyi.serhii.gcmbackend.chatmessageendpoint.Chatmessageendpoint;
+import com.nadolinskyi.serhii.gcmbackend.chatmessageendpoint.model.ChatMessage;
+import com.nadolinskyi.serhii.gcmbackend.chatmessageendpoint.model.CollectionResponseChatMessage;
 import com.nadolinskyi.serhii.gcmbackend.custommessageendpoint.Custommessageendpoint;
 import com.nadolinskyi.serhii.gcmbackend.messageEndpoint.MessageEndpoint;
 import com.nadolinskyi.serhii.gcmbackend.messageEndpoint.model.CollectionResponseMessageData;
@@ -30,15 +34,18 @@ public class MainActivity extends Activity {
 
 
     private static final String LOG_TAG = "MainActivityGCM";
+    private View.OnTouchListener registerListener;
+    private View.OnTouchListener unregisterListener;
+    private Button btnListMessages;
 
     enum State {
         REGISTERED, REGISTERING, UNREGISTERED, UNREGISTERING
     }
 
-    private State curState = State.UNREGISTERED;
-    private MessageEndpoint messageEndpoint = null;
-    private Custommessageendpoint custommessageendpoint = null;
 
+    private State curState = State.UNREGISTERED;
+
+    private Chatmessageendpoint chatmessageendpoint = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +54,10 @@ public class MainActivity extends Activity {
 
 
         initViews();
-        registerInCloud();
+//        registerInCloud();
         initEndPoint();
 
 
-        /*Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);*/
-    //some changes
-        //some changes2
 
 
     }
@@ -68,23 +71,15 @@ public class MainActivity extends Activity {
 
     private void initEndPoint() {
 
-        MessageEndpoint.Builder endpointBuilder = new MessageEndpoint.Builder(
+
+        Chatmessageendpoint.Builder endpintBuilder = new Chatmessageendpoint.Builder(
                 AndroidHttp.newCompatibleTransport(),
                 new JacksonFactory(),
                 new HttpRequestInitializer() {
                     public void initialize(HttpRequest httpRequest) { }
                 });
 
-        messageEndpoint = CloudEndpointUtils.updateBuilder(endpointBuilder).build();
-
-        Custommessageendpoint.Builder customMessageEndpoint = new Custommessageendpoint.Builder(
-                AndroidHttp.newCompatibleTransport(),
-                new JacksonFactory(),
-                new HttpRequestInitializer() {
-                    public void initialize(HttpRequest httpRequest) { }
-                });
-
-        custommessageendpoint = CloudEndpointUtils.updateBuilder(customMessageEndpoint).build();
+        chatmessageendpoint = CloudEndpointUtils.updateBuilder(endpintBuilder).build();
 
     }
 
@@ -98,6 +93,18 @@ public class MainActivity extends Activity {
         btnSend     = (Button) findViewById(R.id.btnSend);
         etNickname  = (EditText) findViewById(R.id.etNickname);
         etMessage   = (EditText) findViewById(R.id.etNickname);
+        btnListMessages   = (Button) findViewById(R.id.btnListMessages);
+
+        btnSend.setEnabled(false);
+        btnListMessages.setEnabled(false);
+
+        btnListMessages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               getListMessages();
+            }
+        });
+
 
         txtChat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,12 +115,74 @@ public class MainActivity extends Activity {
         });
 
 
+        Button regButton = (Button) findViewById(R.id.btnRegister);
+
+        registerListener = new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (GCMIntentService.PROJECT_NUMBER == null
+                                || GCMIntentService.PROJECT_NUMBER.length() == 0) {
+                            showDialog("Unable to register for Google Cloud Messaging. "
+                                    + "Your application's PROJECT_NUMBER field is unset! You can change "
+                                    + "it in GCMIntentService2.java");
+                        } else {
+                            updateState(State.REGISTERING);
+                            try {
+                                GCMIntentService.register(getApplicationContext());
+                            } catch (Exception e) {
+                                Log.e(RegisterActivity.class.getName(),
+                                        "Exception received when attempting to register for Google Cloud "
+                                                + "Messaging. Perhaps you need to set your virtual device's "
+                                                + " target to Google APIs? "
+                                                + "See https://developers.google.com/eclipse/docs/cloud_endpoints_android"
+                                                + " for more information.", e);
+                                showDialog("There was a problem when attempting to register for "
+                                        + "Google Cloud Messaging. If you're running in the emulator, "
+                                        + "is the target of your virtual device set to 'Google APIs?' "
+                                        + "See the Android log for more details.");
+                                updateState(State.UNREGISTERED);
+                            }
+                        }
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        };
+
+        unregisterListener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        updateState(State.UNREGISTERING);
+                        GCMIntentService.unregister(getApplicationContext());
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        };
+
+        regButton.setOnTouchListener(registerListener);
+
+    }
+
+    private void getListMessages() {
+
+        new QueryMessagesTask(this, chatmessageendpoint).execute();
     }
 
     private void sendMessage(String nickname, String message) {
         //TODO send message
 
-        new SendMessagesTask(this, messageEndpoint, nickname, message).execute();
+        new SendMessagesTask(this, chatmessageendpoint, nickname, message).execute();
     }
 
 
@@ -169,7 +238,8 @@ public class MainActivity extends Activity {
          * if we didn't get a registration/unregistration message then
          * go get the last 5 messages from app-engine
          */
-                new QueryMessagesTask(this, messageEndpoint).execute();
+                /*new QueryMessagesTask(this, chatmessageendpoint).execute();*/
+                getListMessages();
             }
         }
     }
@@ -233,6 +303,45 @@ public class MainActivity extends Activity {
     }
 
     private void updateState(State newState) {
+
+        Button registerButton = (Button) findViewById(R.id.btnRegister);
+        switch (newState) {
+            case REGISTERED:
+                registerButton.setText("Unregister");
+                registerButton.setOnTouchListener(unregisterListener);
+                registerButton.setEnabled(true);
+
+                btnSend.setEnabled(true);
+                btnListMessages.setEnabled(true);
+                break;
+
+            case REGISTERING:
+                registerButton.setText("Registering...");
+                registerButton.setEnabled(false);
+
+                btnSend.setEnabled(false);
+                btnListMessages.setEnabled(false);
+
+                break;
+
+            case UNREGISTERED:
+                registerButton.setText("Register");
+                registerButton.setOnTouchListener(registerListener);
+                registerButton.setEnabled(true);
+
+                btnSend.setEnabled(false);
+                btnListMessages.setEnabled(false);
+                break;
+
+            case UNREGISTERING:
+                registerButton.setText("Unregistering...");
+                registerButton.setEnabled(false);
+
+                btnSend.setEnabled(false);
+                btnListMessages.setEnabled(false);
+                break;
+        }
+        
         curState = newState;
     }
 
@@ -246,19 +355,19 @@ public class MainActivity extends Activity {
    * sent to it
    */
     private class QueryMessagesTask
-            extends AsyncTask<Void, Void, CollectionResponseMessageData> {
+            extends AsyncTask<Void, Void, CollectionResponseChatMessage> {
         Exception exceptionThrown = null;
-        MessageEndpoint messageEndpoint;
+        Chatmessageendpoint messageEndpoint;
 
-        public QueryMessagesTask(Activity activity, MessageEndpoint messageEndpoint) {
+        public QueryMessagesTask(Activity activity, Chatmessageendpoint messageEndpoint) {
             this.messageEndpoint = messageEndpoint;
         }
 
         @Override
-        protected CollectionResponseMessageData doInBackground(Void... params) {
+        protected CollectionResponseChatMessage doInBackground(Void... params) {
             try {
-                CollectionResponseMessageData messages =
-                        messageEndpoint.listMessages().setLimit(10).execute();
+                CollectionResponseChatMessage messages =
+                        messageEndpoint.listChatMessages().setLimit(10).execute();
                 return messages;
             } catch (IOException e) {
                 exceptionThrown = e;
@@ -267,7 +376,7 @@ public class MainActivity extends Activity {
             }
         }
 
-        protected void onPostExecute(CollectionResponseMessageData messages) {
+        protected void onPostExecute(CollectionResponseChatMessage messages) {
             // Check if exception was thrown
             if (exceptionThrown != null) {
                 Log.e(MainActivity.class.getName(),
@@ -280,18 +389,18 @@ public class MainActivity extends Activity {
 
                 txtChat.setText("Last 5 Messages read from " +
                         messageEndpoint.getBaseUrl() + ":\n");
-                for(MessageData message : messages.getItems()) {
+                for(ChatMessage message : messages.getItems()) {
 
 
 //                    String nickname = null;
-                    String nickname = message.getNickName();
+                    String nickname = message.getChatname();
 
                     if(TextUtils.isEmpty(nickname)){
                         nickname  = "anonymous";
                     }
 
-                    Date date = new Date(message.getTimestamp());
-                    txtChat.append(date.getHours()+":"+date.getMinutes()+"<"+message.getNickName()+">"+message.getMessage() + "\n");
+                    Date date = new Date(message.getChattimestamp());
+                    txtChat.append(date.getHours()+":"+date.getMinutes()+"<"+message.getChatname()+">"+message.getChatmessage() + "\n");
                 }
             }
         }
@@ -301,11 +410,11 @@ public class MainActivity extends Activity {
     private class SendMessagesTask
             extends AsyncTask<Void, Void, Void> {
         Exception exceptionThrown = null;
-        MessageEndpoint messageEndpoint;
+        Chatmessageendpoint messageEndpoint;
         String message;
         String nickname;
 
-        public SendMessagesTask(Activity activity, MessageEndpoint messageEndpoint, String nickname, String message) {
+        public SendMessagesTask(Activity activity, Chatmessageendpoint messageEndpoint, String nickname, String message) {
             this.messageEndpoint = messageEndpoint;
             this.message = message;
             this.nickname = nickname;
@@ -315,8 +424,12 @@ public class MainActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                MessageEndpoint.SendMessage a = messageEndpoint.sendMessage(nickname, message);
-               messageEndpoint.sendMessage(nickname, message).execute();
+//                MessageEndpoint.SendMessage a = messageEndpoint.sendMessage(nickname, message);
+
+               /* MessageData content = new MessageData();
+                content.setNickName(nickname);
+                content.setMessage(message);*/
+               messageEndpoint.sendChatMessage(nickname, message).execute();
             } catch (IOException e) {
                 exceptionThrown = e;
                 //Handle exception in PostExecute

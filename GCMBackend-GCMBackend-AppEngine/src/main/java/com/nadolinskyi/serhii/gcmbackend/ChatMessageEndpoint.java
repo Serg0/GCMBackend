@@ -21,8 +21,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-@Api(name = "custommessageendpoint", namespace = @ApiNamespace(ownerDomain = "nadolinskyi.com", ownerName = "nadolinskyi.com", packagePath = "serhii.gcmbackend"))
-public class CustomMessageEndpoint {
+@Api(name = "chatmessageendpoint", namespace = @ApiNamespace(ownerDomain = "nadolinskyi.com", ownerName = "nadolinskyi.com", packagePath = "serhii.gcmbackend"))
+public class ChatMessageEndpoint {
 
     /**
      * This method lists all the entities inserted in datastore.
@@ -31,18 +31,18 @@ public class CustomMessageEndpoint {
      * @return A CollectionResponse class containing the list of all entities
      *         persisted and a cursor to the next page.
      */
-    @SuppressWarnings({"unchecked", "unused"})
-    @ApiMethod(name = "listCustomMessage")
-    public CollectionResponse<CustomMessage> listCustomMessage(
+   /* @SuppressWarnings({"unchecked", "unused"})
+    @ApiMethod(name = "listChatMessage")
+    public CollectionResponse<ChatMessage> listChatMessage(
             @Nullable @Named("cursor") String cursorString,
             @Nullable @Named("limit") Integer limit) {
 
         EntityManager mgr = null;
-        List<CustomMessage> execute = null;
+        List<ChatMessage> execute = null;
 
         try {
             mgr = getEntityManager();
-            Query query = mgr.createQuery("select from CustomMessage as CustomMessage");
+            Query query = mgr.createQuery("select from ChatMessage as ChatMessage");
             Cursor cursor;
             if (cursorString != null && cursorString.trim().length() > 0) {
                 cursor = Cursor.fromWebSafeString(cursorString);
@@ -54,24 +54,24 @@ public class CustomMessageEndpoint {
                 query.setMaxResults(limit);
             }
 
-            execute = (List<CustomMessage>) query.getResultList();
+            execute = (List<ChatMessage>) query.getResultList();
             cursor = JPACursorHelper.getCursor(execute);
             if (cursor != null) cursorString = cursor.toWebSafeString();
 
             // Tight loop for fetching all entities from datastore and accomodate
             // for lazy fetch.
-            for (CustomMessage obj : execute) ;
+            for (ChatMessage obj : execute) ;
         } finally {
             if (mgr != null) {
                 mgr.close();
             }
         }
 
-        return CollectionResponse.<CustomMessage>builder()
+        return CollectionResponse.<ChatMessage>builder()
                 .setItems(execute)
                 .setNextPageToken(cursorString)
                 .build();
-    }
+    }*/
 
     /**
      * This method gets the entity having primary key id. It uses HTTP GET method.
@@ -79,16 +79,16 @@ public class CustomMessageEndpoint {
      * @param id the primary key of the java bean.
      * @return The entity with primary key id.
      */
-    @ApiMethod(name = "getCustomMessage")
-    public CustomMessage getCustomMessage(@Named("id") Long id) {
+    @ApiMethod(name = "getChatMessage")
+    public ChatMessage getChatMessage(@Named("id") Long id) {
         EntityManager mgr = getEntityManager();
-        CustomMessage customMessage = null;
+        ChatMessage chatMessage = null;
         try {
-            customMessage = mgr.find(CustomMessage.class, id);
+            chatMessage = mgr.find(ChatMessage.class, id);
         } finally {
             mgr.close();
         }
-        return customMessage;
+        return chatMessage;
     }
 
     /**
@@ -96,21 +96,77 @@ public class CustomMessageEndpoint {
      * exists in the datastore, an exception is thrown.
      * It uses HTTP POST method.
      *
-     * @param customMessage the entity to be inserted.
+     * @param chatMessage the entity to be inserted.
      * @return The inserted entity.
      */
-    @ApiMethod(name = "insertCustomMessage")
-    public CustomMessage insertCustomMessage(CustomMessage customMessage) {
+    @ApiMethod(name = "insertChatMessage")
+    public ChatMessage insertChatMessage(ChatMessage chatMessage) {
         EntityManager mgr = getEntityManager();
         try {
-            if (containsCustomMessage(customMessage)) {
+            if (containsChatMessage(chatMessage)) {
                 throw new EntityExistsException("Object already exists");
             }
-            mgr.persist(customMessage);
+            mgr.persist(chatMessage);
         } finally {
             mgr.close();
         }
-        return customMessage;
+        return chatMessage;
+    }
+
+    /**
+     * This method is used for updating an existing entity. If the entity does not
+     * exist in the datastore, an exception is thrown.
+     * It uses HTTP PUT method.
+     *
+     * @param chatMessage the entity to be updated.
+     * @return The updated entity.
+     */
+    @ApiMethod(name = "updateChatMessage")
+    public ChatMessage updateChatMessage(ChatMessage chatMessage) {
+        EntityManager mgr = getEntityManager();
+        try {
+            if (!containsChatMessage(chatMessage)) {
+                throw new EntityNotFoundException("Object does not exist");
+            }
+            mgr.persist(chatMessage);
+        } finally {
+            mgr.close();
+        }
+        return chatMessage;
+    }
+
+    /**
+     * This method removes the entity with primary key id.
+     * It uses HTTP DELETE method.
+     *
+     * @param id the primary key of the entity to be deleted.
+     * @return The deleted entity.
+     */
+    @ApiMethod(name = "removeChatMessage")
+    public ChatMessage removeChatMessage(@Named("id") Long id) {
+        EntityManager mgr = getEntityManager();
+        ChatMessage chatMessage = null;
+        try {
+            chatMessage = mgr.find(ChatMessage.class, id);
+            mgr.remove(chatMessage);
+        } finally {
+            mgr.close();
+        }
+        return chatMessage;
+    }
+
+    private boolean containsChatMessage(ChatMessage chatMessage) {
+        EntityManager mgr = getEntityManager();
+        boolean contains = true;
+        try {
+            ChatMessage item = mgr.find(ChatMessage.class, chatMessage.getId());
+            if (item == null) {
+                contains = false;
+            }
+        } finally {
+            mgr.close();
+        }
+        return contains;
     }
 
     private static final String API_KEY = "AIzaSyAbtZuqnl3pOCtHxAIPImxAi6x-Zj94Z9M";
@@ -125,16 +181,16 @@ public class CustomMessageEndpoint {
      * @return
      * @throws java.io.IOException
      */
-    @ApiMethod(name = "sendMessage")
+    @ApiMethod(name = "sendChatMessage")
     public void sendMessage(@Named("nickname") String nickname, @Named("message") String message)
             throws IOException {
         Sender sender = new Sender(API_KEY);
         // create a MessageData entity with a timestamp of when it was
         // received, and persist it
-        CustomMessage messageObj = new CustomMessage();
-        messageObj.setMessage(nickname);
-        messageObj.setName(message);
-        messageObj.setTimestamp(System.currentTimeMillis());
+        ChatMessage messageObj = new ChatMessage();
+        messageObj.setChatmessage(nickname);
+        messageObj.setChatname(message);
+        messageObj.setChattimestamp(System.currentTimeMillis());
         EntityManager mgr = getEntityManager();
         try {
             mgr.persist(messageObj);
@@ -187,64 +243,63 @@ public class CustomMessageEndpoint {
 
         return result;
     }
-    /**
-     * This method is used for updating an existing entity. If the entity does not
-     * exist in the datastore, an exception is thrown.
-     * It uses HTTP PUT method.
-     *
-     * @param customMessage the entity to be updated.
-     * @return The updated entity.
-     */
-    @ApiMethod(name = "updateCustomMessage")
-    public CustomMessage updateCustomMessage(CustomMessage customMessage) {
-        EntityManager mgr = getEntityManager();
-        try {
-            if (!containsCustomMessage(customMessage)) {
-                throw new EntityNotFoundException("Object does not exist");
-            }
-            mgr.persist(customMessage);
-        } finally {
-            mgr.close();
-        }
-        return customMessage;
-    }
-
-    /**
-     * This method removes the entity with primary key id.
-     * It uses HTTP DELETE method.
-     *
-     * @param id the primary key of the entity to be deleted.
-     * @return The deleted entity.
-     */
-    @ApiMethod(name = "removeCustomMessage")
-    public CustomMessage removeCustomMessage(@Named("id") Long id) {
-        EntityManager mgr = getEntityManager();
-        CustomMessage customMessage = null;
-        try {
-            customMessage = mgr.find(CustomMessage.class, id);
-            mgr.remove(customMessage);
-        } finally {
-            mgr.close();
-        }
-        return customMessage;
-    }
-
-    private boolean containsCustomMessage(CustomMessage customMessage) {
-        EntityManager mgr = getEntityManager();
-        boolean contains = true;
-        try {
-            CustomMessage item = mgr.find(CustomMessage.class, customMessage.getId());
-            if (item == null) {
-                contains = false;
-            }
-        } finally {
-            mgr.close();
-        }
-        return contains;
-    }
 
     private static EntityManager getEntityManager() {
         return EMF.get().createEntityManager();
     }
 
+    /**
+     * This function returns a list of messages starting with the newest message
+     * first and in descending order from there
+     *
+     * @param cursorString for paging, empty for the first request, subsequent requests can
+     *                     use the returned information from an earlier request to fill this
+     *                     parameter
+     * @param limit        number of results returned for this query
+     * @return A collection of MessageData items
+     */
+    @SuppressWarnings({"unchecked", "unused"})
+    @ApiMethod(name = "listChatMessages")
+    public CollectionResponse<ChatMessage> listMessages(
+            @Nullable @Named("cursor") String cursorString,
+            @Nullable @Named("limit") Integer limit) {
+
+        EntityManager mgr = null;
+        Cursor cursor = null;
+        List<ChatMessage> execute = null;
+
+        try {
+            mgr = getEntityManager();
+           /* // query for messages, newest message first
+            Query query = mgr
+                    .createQuery("select from ChatMessage as ChatMessage order by chattimestamp");*/
+            Query query = mgr
+                    .createQuery("select from ChatMessage as ChatMessage");
+            if (cursorString != null && cursorString != "") {
+                cursor = Cursor.fromWebSafeString(cursorString);
+                query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
+            }
+
+            if (limit != null) {
+                query.setFirstResult(0);
+                query.setMaxResults(limit);
+            }
+
+            execute = (List<ChatMessage>) query.getResultList();
+            cursor = JPACursorHelper.getCursor(execute);
+            if (cursor != null)
+                cursorString = cursor.toWebSafeString();
+
+            // Tight loop for fetching all entities from datastore and accomodate
+            // for lazy fetch.
+            for (ChatMessage obj : execute) {
+                ;
+            }
+        } finally {
+            mgr.close();
+        }
+
+        return CollectionResponse.<ChatMessage>builder().setItems(execute)
+                .setNextPageToken(cursorString).build();
+    }
 }
