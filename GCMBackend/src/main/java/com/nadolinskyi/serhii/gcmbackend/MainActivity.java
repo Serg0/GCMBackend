@@ -389,19 +389,22 @@ public class MainActivity extends Activity {
 
                 txtChat.setText("Last 5 Messages read from " +
                         messageEndpoint.getBaseUrl() + ":\n");
-                for(ChatMessage message : messages.getItems()) {
+
+                if((messages!=null)&&(messages.getItems()!=null))
+
+                    for(ChatMessage message : messages.getItems()) {
 
 
-//                    String nickname = null;
-                    String nickname = message.getChatname();
+    //                    String nickname = null;
+                        String nickname = message.getChatname();
 
-                    if(TextUtils.isEmpty(nickname)){
-                        nickname  = "anonymous";
+                        if(TextUtils.isEmpty(nickname)){
+                            nickname  = "anonymous";
+                        }
+
+                        Date date = new Date(message.getChattimestamp());
+                        txtChat.append(date.getHours()+":"+date.getMinutes()+"<"+message.getChatname()+">"+message.getChatmessage() + "\n");
                     }
-
-                    Date date = new Date(message.getChattimestamp());
-                    txtChat.append(date.getHours()+":"+date.getMinutes()+"<"+message.getChatname()+">"+message.getChatmessage() + "\n");
-                }
             }
         }
     }
