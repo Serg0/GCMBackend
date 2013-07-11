@@ -544,3 +544,10 @@
 14:38:41,327 (main) INFO  [DataNucleus.Enhancer] - Class "com.nadolinskyi.serhii.gcmbackend.MessageData" is already enhanced.
 14:38:41,328 (main) INFO  [DataNucleus.Enhancer] - Class "com.nadolinskyi.serhii.gcmbackend.DeviceInfo" is already enhanced.
 14:38:41,329 (main) INFO  [DataNucleus.Enhancer] - DataNucleus Enhancer completed with success for 4 classes. Timings : input=270 ms, enhance=36 ms, total=306 ms. Consult the log for full details
+15:11:42,833 (main) INFO  [DataNucleus.Enhancer] - DataNucleus Enhancer for API "JDO"
+15:11:43,067 (main) INFO  [DataNucleus.Enhancer] - DataNucleus Enhancer (version 3.1.1) : Enhancement of classes
+15:11:43,362 (main) INFO  [DataNucleus.Enhancer] - Class "com.nadolinskyi.serhii.gcmbackend.CustomMessage" is already enhanced.
+15:11:43,364 (main) INFO  [DataNucleus.Enhancer] - Class "com.nadolinskyi.serhii.gcmbackend.ChatMessage" is already enhanced.
+15:11:43,366 (main) INFO  [DataNucleus.Enhancer] - Class "com.nadolinskyi.serhii.gcmbackend.MessageData" is already enhanced.
+15:11:43,367 (main) INFO  [DataNucleus.Enhancer] - Class "com.nadolinskyi.serhii.gcmbackend.DeviceInfo" is already enhanced.
+15:11:43,368 (main) INFO  [DataNucleus.Enhancer] - DataNucleus Enhancer completed with success for 4 classes. Timings : input=264 ms, enhance=34 ms, total=298 ms. Consult the log for full details

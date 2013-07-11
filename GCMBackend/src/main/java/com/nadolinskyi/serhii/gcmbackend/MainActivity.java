@@ -344,9 +344,6 @@ public class MainActivity extends Activity {
     }
 
 
-
-
-
     /*
    * Need to run this in background so we don't hold up the UI thread,
    * this task will ask the App Engine backend for the last 50 messages
@@ -365,7 +362,7 @@ public class MainActivity extends Activity {
         protected CollectionResponseChatMessage doInBackground(Void... params) {
             try {
                 CollectionResponseChatMessage messages =
-                        messageEndpoint.listChatMessages().setLimit(10).execute();
+                        messageEndpoint.listChatMessages().setLimit(5).execute();
                 return messages;
             } catch (IOException e) {
                 exceptionThrown = e;
@@ -393,7 +390,6 @@ public class MainActivity extends Activity {
                     for(ChatMessage message : messages.getItems()) {
 
 
-    //                    String nickname = null;
                         String nickname = message.getChatname();
 
                         if(TextUtils.isEmpty(nickname)){
@@ -403,7 +399,6 @@ public class MainActivity extends Activity {
 
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(message.getChattimestamp());
-
 
                         txtChat.append(calendar.getTime().toString()+"<"+message.getChatname()+">"+message.getChatmessage() + "\n");
 

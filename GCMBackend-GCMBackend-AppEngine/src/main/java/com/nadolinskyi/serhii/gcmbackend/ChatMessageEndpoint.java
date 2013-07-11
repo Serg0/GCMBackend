@@ -272,9 +272,8 @@ public class ChatMessageEndpoint {
             mgr = getEntityManager();
             // query for messages, newest message first
             Query query = mgr
-                    .createQuery("select from ChatMessage as ChatMessage order by chattimestamp");
-/*            Query query = mgr
-                    .createQuery("select from ChatMessage as ChatMessage");*/
+                    .createQuery("select from ChatMessage as ChatMessage order by chattimestamp desc");
+
             if (cursorString != null && cursorString != "") {
                 cursor = Cursor.fromWebSafeString(cursorString);
                 query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
