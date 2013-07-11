@@ -43,7 +43,7 @@ import com.google.appengine.datanucleus.query.JPACursorHelper;
  * If this app is deployed, anyone can access this endpoint! If you'd like to
  * add authentication, take a look at the documentation.
  */
-@Api(name = "messageEndpoint", namespace = @ApiNamespace(ownerDomain = "nadolinskyi.com", ownerName = "nadolinskyi.com", packagePath = "serhii.gcmbackend"))
+@Api(name = "messageEndpoint", version = "v1_1",namespace = @ApiNamespace(ownerDomain = "nadolinskyi.com", ownerName = "nadolinskyi.com", packagePath = "serhii.gcmbackend"))
 // NO AUTHENTICATION; OPEN ENDPOINT!
 public class MessageEndpoint {
 
@@ -119,7 +119,7 @@ public class MessageEndpoint {
      * @return
      * @throws java.io.IOException
      */
-    @ApiMethod(name = "sendMessage")
+    @ApiMethod(name = "sendMessage", httpMethod = ApiMethod.HttpMethod.POST)
     public void sendMessage(@Named("nickname") String nickname, @Named("message") String message)
             throws IOException {
         Sender sender = new Sender(API_KEY);

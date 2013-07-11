@@ -1,14 +1,14 @@
 package com.nadolinskyi.serhii.gcmbackend;
 
+import android.app.Activity;
+import android.util.Log;
+import android.widget.Toast;
+
 import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.googleapis.services.AbstractGoogleClient;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
-
-import android.app.Activity;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 

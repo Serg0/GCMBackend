@@ -1,8 +1,5 @@
 package com.nadolinskyi.serhii.gcmbackend;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -13,9 +10,11 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson.JacksonFactory;
-
 import com.nadolinskyi.serhii.gcmbackend.deviceinfoendpoint.Deviceinfoendpoint;
 import com.nadolinskyi.serhii.gcmbackend.deviceinfoendpoint.model.DeviceInfo;
+
+import java.io.IOException;
+import java.net.URLEncoder;
 
 /**
  * This class is started up as a service of the Android application. It listens

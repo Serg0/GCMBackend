@@ -1,11 +1,11 @@
 package com.nadolinskyi.serhii.gcmbackend;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Activity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -22,13 +22,9 @@ import com.google.api.client.json.jackson.JacksonFactory;
 import com.nadolinskyi.serhii.gcmbackend.chatmessageendpoint.Chatmessageendpoint;
 import com.nadolinskyi.serhii.gcmbackend.chatmessageendpoint.model.ChatMessage;
 import com.nadolinskyi.serhii.gcmbackend.chatmessageendpoint.model.CollectionResponseChatMessage;
-import com.nadolinskyi.serhii.gcmbackend.custommessageendpoint.Custommessageendpoint;
-import com.nadolinskyi.serhii.gcmbackend.messageEndpoint.MessageEndpoint;
-import com.nadolinskyi.serhii.gcmbackend.messageEndpoint.model.CollectionResponseMessageData;
-import com.nadolinskyi.serhii.gcmbackend.messageEndpoint.model.MessageData;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.Calendar;
 
 public class MainActivity extends Activity {
 
@@ -92,7 +88,7 @@ public class MainActivity extends Activity {
         txtChat     = (TextView) findViewById(R.id.txtvChat);
         btnSend     = (Button) findViewById(R.id.btnSend);
         etNickname  = (EditText) findViewById(R.id.etNickname);
-        etMessage   = (EditText) findViewById(R.id.etNickname);
+        etMessage   = (EditText) findViewById(R.id.etMessage);
         btnListMessages   = (Button) findViewById(R.id.btnListMessages);
 
         btnSend.setEnabled(false);
@@ -106,9 +102,11 @@ public class MainActivity extends Activity {
         });
 
 
-        txtChat.setOnClickListener(new View.OnClickListener() {
+        btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Log.e("SendMessagesTask", "send message button clicked");
 
                 sendMessage(etNickname.getText().toString(), etMessage.getText().toString());
             }
@@ -402,8 +400,13 @@ public class MainActivity extends Activity {
                             nickname  = "anonymous";
                         }
 
-                        Date date = new Date(message.getChattimestamp());
-                        txtChat.append(date.getHours()+":"+date.getMinutes()+"<"+message.getChatname()+">"+message.getChatmessage() + "\n");
+
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(message.getChattimestamp());
+
+
+                        txtChat.append(calendar.getTime().toString()+"<"+message.getChatname()+">"+message.getChatmessage() + "\n");
+
                     }
             }
         }
@@ -427,23 +430,23 @@ public class MainActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-//                MessageEndpoint.SendMessage a = messageEndpoint.sendMessage(nickname, message);
-
-               /* MessageData content = new MessageData();
-                content.setNickName(nickname);
-                content.setMessage(message);*/
-               messageEndpoint.sendChatMessage(nickname, message).execute();
+                messageEndpoint.sendChatMessage(nickname, message).execute();
+                Log.i("SendMessagesTask", "Trying to send message");
             } catch (IOException e) {
                 exceptionThrown = e;
                 //Handle exception in PostExecute
+                Log.e("SendMessagesTask", e.getMessage());
             }
             return null;
         }
 
-        protected void onPostExecute() {
+
+         @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
             // Check if exception was thrown
             if (exceptionThrown != null) {
-                Log.e(MainActivity.class.getName(),
+                Log.e("SendMessagesTask",
                         "Exception when send Messages", exceptionThrown);
                 showDialog("Failed to send message " +
                         "the endpoint at " + messageEndpoint.getBaseUrl() +

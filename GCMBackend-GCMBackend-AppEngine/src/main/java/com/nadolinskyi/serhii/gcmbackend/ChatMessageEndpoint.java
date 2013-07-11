@@ -21,7 +21,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-@Api(name = "chatmessageendpoint", namespace = @ApiNamespace(ownerDomain = "nadolinskyi.com", ownerName = "nadolinskyi.com", packagePath = "serhii.gcmbackend"))
+@Api(name = "chatmessageendpoint", version = "v1", namespace = @ApiNamespace(ownerDomain = "nadolinskyi.com", ownerName = "nadolinskyi.com", packagePath = "serhii.gcmbackend"))
 public class ChatMessageEndpoint {
 
     /**
@@ -188,8 +188,8 @@ public class ChatMessageEndpoint {
         // create a MessageData entity with a timestamp of when it was
         // received, and persist it
         ChatMessage messageObj = new ChatMessage();
-        messageObj.setChatmessage(nickname);
-        messageObj.setChatname(message);
+        messageObj.setChatmessage(message);
+        messageObj.setChatname(nickname);
         messageObj.setChattimestamp(System.currentTimeMillis());
         EntityManager mgr = getEntityManager();
         try {
@@ -270,11 +270,11 @@ public class ChatMessageEndpoint {
 
         try {
             mgr = getEntityManager();
-           /* // query for messages, newest message first
+            // query for messages, newest message first
             Query query = mgr
-                    .createQuery("select from ChatMessage as ChatMessage order by chattimestamp");*/
-            Query query = mgr
-                    .createQuery("select from ChatMessage as ChatMessage");
+                    .createQuery("select from ChatMessage as ChatMessage order by chattimestamp");
+/*            Query query = mgr
+                    .createQuery("select from ChatMessage as ChatMessage");*/
             if (cursorString != null && cursorString != "") {
                 cursor = Cursor.fromWebSafeString(cursorString);
                 query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
